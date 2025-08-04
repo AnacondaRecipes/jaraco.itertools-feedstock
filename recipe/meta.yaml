@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|lower|replace('.', '_') }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace('.', '_') }}-{{ version }}.tar.gz
   sha256: 06c8727afcad659e29ce78773870428500f4daf6f13b9c2f5154ddb21cbca90d
 
 build:
@@ -32,7 +32,7 @@ test:
     - jaraco.itertools
   commands:
     - pip check
-    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - python -c "from importlib.metadata import version; assert(version('{{ name|replace('.', '_') }}')=='{{ version }}')"
   requires:
     - pip
 
