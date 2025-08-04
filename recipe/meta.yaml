@@ -1,40 +1,49 @@
 {% set name = "jaraco.itertools" %}
-{% set version = "6.0.1" %}
+{% set version = "6.4.3" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  sha256: 6939e47806a39330a9f9772bf9ea910da39abc159ff2579d454a763358553439
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace('.', '_') }}-{{ version }}.tar.gz
+  sha256: 06c8727afcad659e29ce78773870428500f4daf6f13b9c2f5154ddb21cbca90d
 
 build:
   number: 0
-  noarch: python
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: True  # [py<39]
 
 requirements:
   host:
     - pip
-    - python >=3.6
-    - setuptools_scm >=1.15.0
+    - python
+    - wheel
+    - setuptools >=61.2
+    - setuptools_scm >=3.4.1
+    - toml
   run:
-    - python >=3.6
+    - python
     - more-itertools >=4.0.0
     - inflect
 
 test:
   imports:
     - jaraco.itertools
+  commands:
+    - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name|replace('.', '_') }}')=='{{ version }}')"
+  requires:
+    - pip
 
 about:
   home: https://github.com/jaraco/jaraco.itertools
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  summary: "Additional itertools in the spirit of stdlib's itertools."
-  doc_url: https://github.com/jaraco/jaraco.itertools
+  summary: Additional itertools in the spirit of stdlib's itertools.
+  description: Additional itertools in the spirit of stdlib's itertools.
+  doc_url: https://jaracoitertools.readthedocs.io
   dev_url: https://github.com/jaraco/jaraco.itertools
 
 extra:
